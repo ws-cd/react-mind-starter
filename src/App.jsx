@@ -1,3 +1,4 @@
+import { useKeyPress, useMemoizedFn } from 'ahooks';
 import { Graph, useValueFocus, useValueOption } from './core';
 
 const data = [
@@ -19,80 +20,63 @@ const Action = ({ active, onClick, children }) => (
     {children}
   </span>
 );
-
-const Add = () => {
-  const { focus } = useValueFocus();
-  const { add } = useValueOption();
-  const onAdd = () => {
-    if (focus) {
-      const { id } = focus;
-      add({ parentId: id });
-    }
-  };
-  return (
-    <Action active={focus} onClick={onAdd}>
-      add
-    </Action>
-  );
-};
-const Sub = () => {
-  const { focus } = useValueFocus();
-  const { add } = useValueOption();
-  const onSub = () => {
-    if (focus) {
-      const { parentId } = focus;
-      add({ parentId });
-    }
-  };
-  return (
-    <Action active={focus} onClick={onSub}>
-      sub
-    </Action>
-  );
-};
-const Redo = () => {
-  const { redo, canRedo } = useValueOption();
-  return (
-    <Action active={canRedo} onClick={redo}>
-      redo
-    </Action>
-  );
-};
-const Undo = () => {
-  const { undo, canUndo } = useValueOption();
-  return (
-    <Action active={canUndo} onClick={undo}>
-      undo
-    </Action>
-  );
-};
-const Del = () => {
+const useOptions = () => {
   const { focus, unFocus } = useValueFocus();
-  const { del } = useValueOption();
-  const onClick = () => {
+  const { addNode, redo, undo, canRedo, canUndo, delNode } = useValueOption();
+  const onDel = useMemoizedFn(() => {
     if (focus) {
       const { id } = focus;
-      del(id);
+      delNode(id);
       unFocus();
     }
-  };
+  });
+  const onAdd = useMemoizedFn(() => {
+    if (focus) {
+      const { id } = focus;
+      addNode({ parentId: id });
+    }
+  });
+  const onSub = useMemoizedFn(() => {
+    if (focus) {
+      const { parentId } = focus;
+      addNode({ parentId });
+    }
+  });
+  return { onAdd, onSub, onDel, redo, undo, canRedo, canUndo, focus };
+};
+const Toolbar = () => {
+  const { onAdd, onSub, onDel, redo, undo, canRedo, canUndo, focus } = useOptions();
+  useKeyPress('enter', onSub);
+  useKeyPress('tab', evt => {
+    evt.stopPropagation();
+    evt.preventDefault();
+    onAdd();
+  });
   return (
-    <Action active={focus} onClick={onClick}>
-      del
-    </Action>
+    <div className="px-2 py-1 bg-white rounded-sm shadow absolute top-2 left-2 flex gap-2">
+      <Action active={focus} onClick={onAdd}>
+        add
+      </Action>
+      <Action active={focus} onClick={onSub}>
+        sub
+      </Action>
+      <Action active={canRedo} onClick={redo}>
+        redo
+      </Action>
+      <Action active={canUndo} onClick={undo}>
+        undo
+      </Action>
+      <Action active={focus} onClick={onDel}>
+        del
+      </Action>
+    </div>
   );
 };
 const App = () => {
   return (
     <div className="w-full h-screen">
       <Graph options={{ initialValues: data }}>
-        <div className="px-2 py-1 bg-white rounded-sm shadow absolute top-2 left-2 flex gap-2">
-          <Add />
-          <Sub />
-          <Redo />
-          <Undo />
-          <Del />
-        </div>
+        <Toolbar />
       </Graph>
     </div>
   );

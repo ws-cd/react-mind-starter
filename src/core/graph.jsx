@@ -132,24 +132,53 @@ export const useUndoRedoOption = () => {
 const checkIn = (id, values) => values.some(v => v.id === id);
 // options
 export const useValueOption = () => {
-  const { value, setValue, refresh, redo, undo, canRedo, canUndo } = useContext(GraphContext) || {};
+  const { setValue, refresh, redo, undo, canRedo, canUndo, onFocus } = useContext(GraphContext) || {};
 
   /// add a node
   const add = useMemoizedFn(node => {
+    const id = nanoid();
+    const wrapper = { _id: id, id, ...node };
     setValue(v => {
-      const id = nanoid();
-      const wrapper = { _id: id, id, ...node };
       v.push(wrapper);
       return v.slice();
     });
   });
 
-  /// del the node, effect: will be del the children of the node
+  /// add a node and focus
+  const addNode = useMemoizedFn(node => {
+    const id = nanoid();
+    const wrapper = { _id: id, id, ...node };
+    setValue(v => {
+      v.push(wrapper);
+      return v.slice();
+    });
+    onFocus(wrapper);
+  });
+
+  /// del the node
   const del = useMemoizedFn(id => {
     setValue(v => {
       if (checkIn(id, v)) {
         const data = v.filter(v => v.id !== id);
         return data;
+      }
+      return v;
+    });
+  });
+
+  // del the node, effect: will be del the children of the node
+  const delNode = useMemoizedFn(id => {
+    setValue(v => {
+      if (checkIn(id, v)) {
+        const collection = [];
+        const temp = [id];
+        let target = null;
+        while (temp.length) {
+          target = temp.pop();
+          collection.push(target);
+          temp.push(...v.filter(i => i.parentId === target).map(i => i.id));
+        }
+        return v.filter(i => !collection.includes(i.id));
       }
       return v;
     });
@@ -167,5 +196,8 @@ export const useValueOption = () => {
     });
   });
 
-  return useMemo(() => ({ add, del, update, refresh, setValue, redo, undo, canRedo, canUndo }), [canRedo, canUndo]);
+  return useMemo(
+    () => ({ add, addNode, del, delNode, update, refresh, setValue, redo, undo, canRedo, canUndo }),
+    [canRedo, canUndo]
+  );
 };
