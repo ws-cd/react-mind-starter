@@ -5,6 +5,7 @@ import { CanvasProvider } from './canvas-context';
 import { DefaultBackground, DefaultLinkComponent, DefaultNodeComponent } from './default';
 import { useFocusItem, useUndoRedo } from './hook';
 import { buildGraphTree, buildId } from './util';
+import './index.css';
 
 const GraphContext = createContext();
 
@@ -89,11 +90,11 @@ export const GraphProvider = ({ options = defaultOptions, children }) => {
   );
   return (
     <GraphContext.Provider value={context}>
-      <div className="w-full h-full relative overflow-hidden">
+      <div className="mind-graph">
         <DefaultBackground />
         <CanvasProvider options={canvasOptions}></CanvasProvider>
       </div>
-      <div className="absolute top-0 left-0">{children}</div>
+      <div className="mind-graph-children">{children}</div>
     </GraphContext.Provider>
   );
 };

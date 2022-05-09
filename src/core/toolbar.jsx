@@ -2,13 +2,13 @@ import React from 'react';
 import { useCanvas } from './canvas-context';
 
 const Action = ({ children, ...rest }) => (
-  <div className="p-2 rounded cursor-pointer hover:text-primary flex justify-center items-center" {...rest}>
+  <div className="mind-graph-toolbar-action" {...rest}>
     {children}
   </div>
 );
 const Divider = () => (
   <svg
-    className="fill-current text-gray-300"
+    className="mind-graph-toolbar-divider"
     viewBox="0 0 1024 1024"
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
@@ -23,10 +23,11 @@ const textLength = { width: 38 };
 const Toolbar = () => {
   const { zoomText, zoomIn, zoomOut, fitCenter } = useCanvas();
   return (
-    <div className="absolute bottom-2 left-2 p-1 bg-white rounded shadow-md border-t border-gray-100 flex items-center gap-1">
+    <div className="mind-graph-toolbar">
       <Action onClick={fitCenter}>
         <svg
           t="1651207653756"
+          className="mind-graph-toolbar-action-icon"
           viewBox="0 0 1024 1024"
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +41,7 @@ const Toolbar = () => {
       <div className="flex gap-2 items-center">
         <Action onClick={zoomIn}>
           <svg
-            className="text-base fill-current"
+            className="mind-graph-toolbar-action-icon"
             viewBox="0 0 1024 1024"
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"
@@ -53,12 +54,12 @@ const Toolbar = () => {
             />
           </svg>
         </Action>
-        <span className="text-gray-700 text-sm text-center leading-none select-none" style={textLength}>
+        <span className="mind-graph-toolbar-action-text" style={textLength}>
           {zoomText}
         </span>
         <Action onClick={zoomOut}>
           <svg
-            className="text-base fill-current"
+            className="mind-graph-toolbar-action-icon"
             viewBox="0 0 1024 1024"
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"

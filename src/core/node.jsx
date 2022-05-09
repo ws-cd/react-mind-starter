@@ -23,19 +23,15 @@ const Node = ({ node, children }) => {
   });
 
   return (
-    <div className="flex items-center gap-16">
+    <div className="mind-graph-node">
       <div
-        className={
-          focus?._id === node._id
-            ? 'cursor-pointer p-2 border-2 border-dashed rounded-md border-red-500 shadow-md'
-            : 'cursor-pointer p-2 border-2 border-transparent'
-        }
+        className={focus?._id === node._id ? 'mind-graph-node-wrapper-focus' : 'mind-graph-node-wrapper'}
         ref={ref}
         onClick={onFocusItem}
       >
         <Component {...defaultProps} {...node} />
       </div>
-      {children && <div className="flex flex-col justify-center gap-1">{children}</div>}
+      {children && <div className="mind-graph-node-children">{children}</div>}
     </div>
   );
 };

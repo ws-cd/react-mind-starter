@@ -74,7 +74,7 @@ const Toolbar = () => {
 };
 const App = () => {
   return (
-    <div className="w-full h-screen">
+    <div className="full">
       <Graph options={{ initialValues: data }}>
         <Toolbar />
       </Graph>

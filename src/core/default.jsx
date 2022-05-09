@@ -3,8 +3,8 @@ import { memo, useMemo } from 'react';
 
 export const DefaultNodeComponent = memo(({ _id }) => {
   return (
-    <div className="px-4 py-2 h-12 w-24 bg-white truncate text-base leading-none font-bold font-serif antialiased text-gray-800 border border-green-400 shadow rounded-sm">
-      Node: <span className="text-xl leading-none text-center text-green-500 font-bold">{_id}</span>
+    <div className="mind-graph-default-node">
+      Node: <span className="mind-graph-default-node-text">{_id}</span>
     </div>
   );
 });
@@ -13,7 +13,7 @@ export const DefaultLinkComponent = memo(({ item, ...rest }) => {
   const d = useMemo(() => linkHorizontal()(item), [item]);
   return (
     <g>
-      <path d={d} className="fill-transparent stroke-current text-gray-600 stroke-2 hover:text-primary" {...rest} />
+      <path d={d} className="mind-graph-default-link" {...rest} />
     </g>
   );
 });
@@ -22,7 +22,7 @@ const defaultBgSize = 40;
 const defaultBgColor = '#FAFAFA';
 export const DefaultBackground = memo(({ size = defaultBgSize, color = defaultBgColor }) => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" height="100%" width="100%" className="absolute -z-99">
+    <svg xmlns="http://www.w3.org/2000/svg" height="100%" width="100%" className="mind-graph-default-background">
       <defs>
         <pattern
           id="doodad"

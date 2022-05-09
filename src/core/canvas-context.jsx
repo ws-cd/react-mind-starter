@@ -27,21 +27,15 @@ export const CanvasProvider = ({ options: { initialScale, maxScale, minScale } }
   const context = useMemo(() => ({ zoom, zoomText, zoomIn, zoomOut, fitCenter }), [zoom, zoomText]);
   return (
     <CanvasContext.Provider value={context}>
-      <div
-        className="overflow-auto overscroll-contain w-full h-full relative"
-        id="m-canvas-container"
-        ref={containerRef}
-      >
+      <div className="mind-graph-canvas" id="m-canvas-container" ref={containerRef}>
         <div
-          className="h-2h w-2w flex items-center justify-center"
+          className="mind-graph-canvas-transform"
           style={{ transform: `scale(${zoom})` }}
           id="m-canvas"
           onClick={unFocus}
         >
-          <div className="w-max">
-            {nodes}
-            <Link tree={tree} />
-          </div>
+          {nodes}
+          <Link tree={tree} />
         </div>
       </div>
       <Toolbar />

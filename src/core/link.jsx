@@ -5,7 +5,7 @@ const Link = ({ tree }) => {
   const links = useLinks(tree);
   const { component: Component } = useGraphLinkOptions();
   return (
-    <svg className="overflow-visible absolute top-0 left-0" width={300} height={200}>
+    <svg className="mind-graph-link" width={300} height={200}>
       {links.map(item => (
         <Component key={item._id} item={item} />
       ))}
